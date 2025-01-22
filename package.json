@@ -1,0 +1,12 @@
+{
+  "name": "@troplo/debug-overlay",
+  "version": "1.0.0",
+  "repository": "https://github.com/Troplo/debug-overlay.git",
+  "author": "Troplo <troplo@troplo.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  }
+}
