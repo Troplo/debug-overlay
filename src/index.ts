@@ -20,12 +20,14 @@ function handleKeyDown(event: KeyboardEvent) {
       continue;
     }
     let key = dialog.shortcut?.find(
-      (key) => key !== "CTRL" && key !== "ALT" && key !== "SHIFT",
+      (key) => key !== "CTRL" && key !== "ALT" && key !== "SHIFT"
     );
     if (key && key.toUpperCase() && key === event.key.toUpperCase()) {
       if (logToConsole)
         console.log(
-          `[Troplo/DebugOverlayFramework] Toggled dialog: ${dialog.title} to ${!dialog.active}`,
+          `[Troplo/DebugOverlayFramework] Toggled dialog: ${
+            dialog.title
+          } to ${!dialog.active}`
         );
       dialog.active = !dialog.active;
       _handleChange();
@@ -85,7 +87,7 @@ export function install({
   if (typeof window === "undefined") {
     if (logToConsole)
       console.warn(
-        `[Troplo/DebugOverlayFramework] Cannot install in SSR environment.`,
+        `[Troplo/DebugOverlayFramework] Cannot install in SSR environment.`
       );
     return;
   }
@@ -122,7 +124,9 @@ export function install({
 
   if (logToConsole)
     console.log(
-      `[Troplo/DebugOverlayFramework] Installed.\nRegistered:\n${store.dialogs.value.map((dialog) => dialog.title).join("\n")}`,
+      `[Troplo/DebugOverlayFramework] Installed.\nRegistered:\n${store.dialogs.value
+        .map((dialog) => dialog.title)
+        .join("\n")}`
     );
 }
 
@@ -146,7 +150,9 @@ export function uninstall(): void {
 
   if (logToConsole)
     console.log(
-      `[Troplo/DebugOverlayFramework] Uninstalled.\nRegistered:\n${store.dialogs.value.map((dialog) => dialog.title).join("\n")}`,
+      `[Troplo/DebugOverlayFramework] Uninstalled.\nRegistered:\n${store.dialogs.value
+        .map((dialog) => dialog.title)
+        .join("\n")}`
     );
   window.__troplo_debug_framework_store = null;
 }
@@ -172,26 +178,28 @@ export function registerWidget({
   component,
   shortcut,
   active,
+  category,
 }: {
   title: string;
   component: VNode;
   shortcut?: string[];
   active?: boolean;
+  category?: string;
 }): void {
   if (!window || !window.__troplo_debug_framework_store) {
     if (logToConsole)
       console.warn(
-        `[Troplo/DebugOverlayFramework] Cannot register widget before installation: ${title}`,
+        `[Troplo/DebugOverlayFramework] Cannot register widget before installation: ${title}`
       );
     return;
   }
   const existing = useDebugStore().dialogs.value.find(
-    (dialog) => dialog.title === title,
+    (dialog) => dialog.title === title
   );
 
   if (existing) {
     console.error(
-      `[Troplo/DebugOverlayFramework] Widget already registered: ${title}`,
+      `[Troplo/DebugOverlayFramework] Widget already registered: ${title}`
     );
     return;
   }
@@ -207,12 +215,13 @@ export function registerWidget({
       },
       {
         default: () => component,
-      },
+      }
     ),
     title,
     shortcut,
     id: null,
     vNodeInstance: null,
+    category,
   });
 
   if (logToConsole)
@@ -229,30 +238,112 @@ export function registerWidget({
 export function unregisterWidget(title: string): void {
   if (!window || !window.__troplo_debug_framework_store) {
     console.error(
-      `[Troplo/DebugOverlayFramework] Cannot unregister widget before installation: ${title}`,
+      `[Troplo/DebugOverlayFramework] Cannot unregister widget before installation: ${title}`
     );
     return;
   }
   if (title === ACTION_DIALOG_NAME) {
     if (logToConsole)
       console.error(
-        `[Troplo/DebugOverlayFramework] Cannot unregister widget: ${title}`,
+        `[Troplo/DebugOverlayFramework] Cannot unregister widget: ${title}`
       );
     return;
   }
   const store = useDebugStore();
 
   const index = store.dialogs.value.findIndex(
-    (dialog) => dialog.title === title,
+    (dialog) => dialog.title === title
   );
 
   if (index !== -1) {
     store.dialogs.value.splice(index, 1);
     if (logToConsole)
       console.log(
-        `[Troplo/DebugOverlayFramework] Unregistered widget: ${title}`,
+        `[Troplo/DebugOverlayFramework] Unregistered widget: ${title}`
       );
   } else if (logToConsole) {
     console.log(`[Troplo/DebugOverlayFramework] Widget not found: ${title}`);
+  }
+}
+
+/**
+ * Open a dialog by title name
+ * @param {string} title
+ * @returns {void}
+ * @example
+ * openDialog("Experiments Manager");
+ */
+export function openWidget(title: string): void {
+  if (!window || !window.__troplo_debug_framework_store) {
+    if (logToConsole)
+      console.error(
+        `[Troplo/DebugOverlayFramework] Cannot open dialog before installation: ${title}`
+      );
+    return;
+  }
+  const store = useDebugStore();
+
+  const dialog = store.dialogs.value.find((dialog) => dialog.title === title);
+
+  if (dialog) {
+    dialog.active = true;
+    _handleChange();
+  } else if (logToConsole) {
+    console.error(`[Troplo/DebugOverlayFramework] Dialog not found: ${title}`);
+  }
+}
+
+/**
+ * Close a dialog by title name
+ * @param {string} title
+ * @returns {void}
+ * @example
+ * closeWidget("Experiments Manager");
+ */
+export function closeWidget(title: string): void {
+  if (!window || !window.__troplo_debug_framework_store) {
+    if (logToConsole)
+      console.error(
+        `[Troplo/DebugOverlayFramework] Cannot close dialog before installation: ${title}`
+      );
+    return;
+  }
+  const store = useDebugStore();
+
+  const dialog = store.dialogs.value.find((dialog) => dialog.title === title);
+
+  if (dialog) {
+    dialog.active = false;
+    _handleChange();
+  } else if (logToConsole) {
+    console.error(`[Troplo/DebugOverlayFramework] Dialog not found: ${title}`);
+  }
+}
+
+/**
+ * Toggle a dialog by title name. Will open if closed and close if open.
+ * Use openWidget or closeWidget for explicit control.
+ * @param {string} title
+ * @returns {void}
+ * @example
+ * toggleWidget("Experiments Manager");
+ */
+export function toggleWidget(title: string): void {
+  if (!window || !window.__troplo_debug_framework_store) {
+    if (logToConsole)
+      console.error(
+        `[Troplo/DebugOverlayFramework] Cannot toggle dialog before installation: ${title}`
+      );
+    return;
+  }
+  const store = useDebugStore();
+
+  const dialog = store.dialogs.value.find((dialog) => dialog.title === title);
+
+  if (dialog) {
+    dialog.active = !dialog.active;
+    _handleChange();
+  } else if (logToConsole) {
+    console.error(`[Troplo/DebugOverlayFramework] Dialog not found: ${title}`);
   }
 }

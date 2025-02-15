@@ -18,6 +18,7 @@ interface Store {
       id: string | null;
       lastInteracted?: number;
       vNodeInstance: VNode | null;
+      category?: string;
     }[]
   >;
   platform: StorePlatform & {

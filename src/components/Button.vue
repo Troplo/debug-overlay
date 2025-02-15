@@ -30,13 +30,10 @@ const computedStyles = computed(() => ({
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(4, 4, 4, 0.1);
 }
 
 .material-button:hover {
