@@ -109,7 +109,7 @@ export function install({
       platform: {
         version: "0.0.0",
         name: "UNKNOWN",
-        devOverlay: "1.0.0",
+        devOverlay: "1.0.4",
         environment: "dev",
       },
       app,
