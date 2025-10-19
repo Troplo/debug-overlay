@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "types": ["vue", "node"],
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "target": "ES2015",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "emitDeclarationOnly": true
+  },
+  "include": ["src/**/*"]
+}

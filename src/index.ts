@@ -1,5 +1,6 @@
+import "./styles/main.css"
 import { useDebugStore, type StorePlatform } from "./store";
-import { render, VNode, h, createVNode, ref, App } from "vue";
+import { render, type VNode, h, createVNode, ref, type App } from "vue";
 import TemplateDialog from "./components/TemplateDialog.vue";
 import ActionDialog from "./components/ActionDialog.vue";
 
@@ -92,7 +93,7 @@ export function install({
     return;
   }
   if (!useFramework) return;
-  logToConsole = log;
+  logToConsole = log ?? false;
   if (!window.__troplo_debug_framework_store)
     window.__troplo_debug_framework_store = {
       dialogs: ref([
@@ -114,7 +115,7 @@ export function install({
       },
       app,
     };
-  const store = useDebugStore();
+  const store = useDebugStore()!;
   window.__troplo_debug_framework_store.platform.name = platform.name;
   window.__troplo_debug_framework_store.platform.version = platform.version;
   window.__troplo_debug_framework_store.platform.environment =

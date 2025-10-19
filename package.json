@@ -1,12 +1,31 @@
 {
   "name": "@troplo/debug-overlay",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": "https://github.com/Troplo/debug-overlay.git",
   "author": "Troplo <troplo@troplo.com>",
   "license": "MIT",
-  "private": false,
+  "main": "dist/debug-overlay.cjs.js",
+  "module": "dist/debug-overlay.es.js",
+  "unpkg": "dist/debug-overlay.umd.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "build:js": "vite build",
+    "build": "yarn build:js && yarn build:types",
+    "type-check": "vue-tsc --noEmit"
+  },
   "peerDependencies": {
     "vue": "^3",
     "vue-router": "^4"
+  },
+  "packageManager": "yarn@4.10.3+sha512.c38cafb5c7bb273f3926d04e55e1d8c9dfa7d9c3ea1f36a4868fa028b9e5f72298f0b7f401ad5eb921749eb012eb1c3bb74bf7503df3ee43fd600d14a018266f",
+  "devDependencies": {
+    "@babel/types": "^7.28.4",
+    "@types/node": "^24.8.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.10",
+    "vue": "^3.5.22",
+    "vue-tsc": "^3.1.1"
   }
 }
