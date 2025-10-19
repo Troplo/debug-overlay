@@ -1,4 +1,3 @@
-import "./styles/main.css"
 import { useDebugStore, type StorePlatform } from "./store";
 import { render, type VNode, h, createVNode, ref, type App } from "vue";
 import TemplateDialog from "./components/TemplateDialog.vue";
